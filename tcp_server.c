@@ -6,6 +6,12 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#include "user.h"
+extern map<string, user_info> user_data;
+
+#define MAXLINE 4096
+#define SERV_PORT 8888
+
 void *connection_handler(void *);
 
 int main()
@@ -23,7 +29,7 @@ int main()
 
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(8888);
+	server.sin_port = htons(SERV_PORT);
 
 	if(bind(socket_desc, (struct sockaddr *)&server, sizeof(server)) < 0)
 	{
@@ -57,16 +63,16 @@ void* connection_handler(void* socket_desc)
 	int sock = *(int*)socket_desc;
 	int read_size;
 	char *message;
-	char client_message[2000];
+	char client_message[MAXLINE];
 
-	message = "Greetings! I am your connection handler\n";
-	write(sock, message, strlen(message));
+	//message = "Greetings! I am your connection handler\n";
+	//write(sock, message, strlen(message));
 
-	while((read_size = recv(sock, client_message, 2000, 0)) > 0)
+	while((read_size = recv(sock, client_message, MAXLINE, 0)) > 0)
 	{
 		client_message[read_size] = '\0';
 		write(sock, client_message, strlen(client_message));
-		memset(client_message, 0, 2000);
+		memset(client_message, 0, MAXLINE);
 	}
 	if(read_size == 0)
 	{
