@@ -1,17 +1,51 @@
 #ifndef USER_H_
 #define USER_H_
 
-#include <map>
+#pragma pack(1)
+
+#define MAX_USER 50
+
+#include <pthread.h>
+#include <unordered_map>
 #include <iterator>
 #include <string>
 using namespace std;
 
+typedef unsigned char uint8_t;
+//state is for user state, current_life is life during pk, initilized to 10
 struct user_info
 {
-	int state;
+	int state; // 0 stands for offline, 1 stands for online, 2 stands for in battle
 	int current_life;
-
+	int sock;
 };
+
+//TCP data structure. category is for query type, user_name is for query user, pk_name 
+//is for user_name ask for pk, info is for additional information.
+struct tcp_data
+{
+	uint8_t category; // 0x01 stands for login
+	char user_name[50];
+	char pk_name[50];
+	uint8_t info; // 0x01 stands for success, 0x02 stands for failure
+};
+
+struct user_data
+{
+	char name[50];
+	int state;
+};
+
+struct tcp_broadcast
+{
+	uint8_t category;
+	int user_num;
+	struct user_data user[MAX_USER];
+};
+
+typedef struct user_info UserInfo;
+typedef struct tcp_data TcpData;
+typedef struct tcp_broadcast TcpBroad;
 
 
 #endif

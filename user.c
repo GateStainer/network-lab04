@@ -1,3 +1,6 @@
 #include "user.h"
 
-map<string, struct user_info> user_data;
+//We don't allow users with the same name
+unordered_map<string, UserInfo> user_table;
+
+
