@@ -15,9 +15,10 @@ typedef unsigned char uint8_t;
 //state is for user state, current_life is life during pk, initilized to 10
 struct user_info
 {
-	int state; // 0 stands for offline, 1 stands for online, 2 stands for in battle
+	int state; // 0 stands for offline, 1 stands for online, 2 stands for waiting PK, 3 stands for in PK(waiting user), 4 stands for in PK(waiting judge)
 	int current_life;
 	int sock;
+	uint8_t signal;
 };
 
 //TCP data structure. category is for query type, user_name is for query user, pk_name 
@@ -28,6 +29,7 @@ struct tcp_data
 	char user_name[50];
 	char pk_name[50];
 	uint8_t info; // 0x01 stands for success, 0x02 stands for failure
+	int remain_life;
 };
 
 struct user_data
@@ -45,7 +47,7 @@ struct tcp_broadcast
 
 typedef struct user_info UserInfo;
 typedef struct tcp_data TcpData;
-typedef struct tcp_broadcast TcpBroad;
+typedef struct tcp_broadcast TcpBroadcast;
 
 
 #endif
